@@ -1,0 +1,4 @@
+Manager Username: admin
+Manager Password: admin
+Receptionist Username: abcd
+Receptionist Password: 1234

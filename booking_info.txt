@@ -1,0 +1,6 @@
+Booking 0:
+  Room ID: 1
+  Customer ID: 0
+  Booking Date: 20-09-2024
+  Checkin Date: 23-09-2024
+  Checkout Date: 27-09-2024
