@@ -1,4 +1,4 @@
 Manager Username: admin
 Manager Password: admin
-Receptionist Username: qwer
-Receptionist Password: qwer
+Receptionist Username: abcd
+Receptionist Password: 1234
