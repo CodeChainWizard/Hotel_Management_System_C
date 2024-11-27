@@ -1,0 +1,6 @@
+Double room,5000
+Presidential Suites,10000
+Single room,2500
+Triple room,7500
+Executive suite,15000
+Standard room,20000

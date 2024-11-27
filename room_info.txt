@@ -1,8 +1,1 @@
-Room 1:
-  Capacity: 4
-  Price: 100
-  Status: available
-Room 2:
-  Capacity: 2
-  Price: 500
-  Status: available
+

@@ -1,0 +1,2 @@
+101A 2 5000.00 available Double room
+101B 4 10000.00 available Presidential Suites
