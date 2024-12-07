@@ -1,5 +1,5 @@
 Manager Username: admin
-Manager Password: admin
+Manager Password: admi
 Receptionist Username: abcd
 Receptionist Password: 1234
 User  Username: user

@@ -2108,7 +2108,7 @@ void displayRooms(Room *rooms, int roomCount);
 void displayCustomerStatus(Customer *customers, int customerCount);
 void displayBookingStatus(Booking *bookings, int bookingCount);
 int loginReceptionist(Receptionist receptionist);
-int loginUser (User user);
+int loginUser (User *user, int userCount);
 void loadMenu(MenuItem *menu, int *menuCount);
 void loadLoginInfo(Manager *manager, Receptionist *receptionist, User *user);
 void saveLoginInfo(Manager manager, Receptionist receptionist, User user);
@@ -2120,6 +2120,7 @@ void purchaseItem(MenuItem *menu, int menuCount, Bill *bill);
 void loadRoomsFromFile(Room *rooms, int *roomCount);
 void saveRoomsToFile(Room *rooms, int roomCount);
 void loadRoomTypes(RoomType *roomTypes, int *roomTypeCount);
+void registerUser(User *users, int *userCount);
 
 // Function to display the header
 void displayHeader() {
@@ -2368,19 +2369,38 @@ int loginReceptionist(Receptionist receptionist) {
 }
 
 // Function to login as user
-int loginUser (User user) {
+// int loginUser (User user) {
+//     char username[20];
+//     char password[20];
+//     printf("Enter username: ");
+//     scanf("%s", username);
+//     printf("Enter password: ");
+//     scanf("%s", password);
+//     if (strcmp(username, user.username) == 0 && strcmp(password, user.password) == 0) {
+//         printf("Login successful\n");
+//         return 1;
+//     }
+//     printf("Invalid username or password\n");
+//     return 0;
+// }
+
+int loginUser(User *users, int userCount) {
     char username[20];
     char password[20];
     printf("Enter username: ");
     scanf("%s", username);
     printf("Enter password: ");
     scanf("%s", password);
-    if (strcmp(username, user.username) == 0 && strcmp(password, user.password) == 0) {
-        printf("Login successful\n");
-        return 1;
+
+    // Check against all registered users
+    for (int i = 0; i < userCount; i++) {
+        if (strcmp(username, users[i].username) == 0 && strcmp(password, users[i].password) == 0) {
+            printf("Login successful\n");
+            return 1; // User found and logged in
+        }
     }
     printf("Invalid username or password\n");
-    return 0;
+    return 0; // User not found
 }
 
 // Function to load menu items from a file
@@ -2573,6 +2593,56 @@ void userBookRoom(Room *rooms, int roomCount, Customer *customers, int *customer
     printf("Room %s not available\n", roomName);
 }
 
+// --- New user regiter Logic ---
+void registerUser (User *user, int *userCount) {
+    printf("Enter your name: ");
+    scanf(" %[^\n]", user->name); // Read string with spaces
+    printf("Enter your email: ");
+    scanf("%s", user->email);
+    printf("Enter your phone number: ");
+    scanf("%s", user->phoneNumber);
+    printf("Enter a username: ");
+    scanf("%s", user->username);
+    printf("Enter a password: ");
+    scanf("%s", user->password);
+
+    // Save the user details to userDetails.txt
+    FILE *file = fopen("userDetails.txt", "a");
+    if (file == NULL) {
+        printf("Error opening user details file for writing.\n");
+        return;
+    }
+    fprintf(file, "%s,%s,%s,%s,%s\n", user->name, user->email, user->phoneNumber, user->username, user->password);
+    fclose(file);
+    printf("Registration successful! You can now log in.\n");
+}
+
+
+void loadUserDetails(User *user, int *userCount) {
+    FILE *file = fopen("userDetails.txt", "r");
+    if (file == NULL) {
+        printf("Could not open user details file.\n");
+        return;
+    }
+    while (fscanf(file, "%49[^,],%49[^,],%19[^,],%19[^,],%19[^\n]\n", user[*userCount].name, user[*userCount].email, user[*userCount].phoneNumber, user[*userCount].username, user[*userCount].password) != EOF) {
+        (*userCount)++;
+    }
+    fclose(file);
+    printf("Loaded %d existing users.\n", *userCount);
+}
+
+// Function to check if the user exists
+int userExists(User *users, int userCount, const char *username, const char *password) {
+    for (int i = 0; i < userCount; i++) {
+        if (strcmp(users[i].username, username) == 0 && strcmp(users[i].password, password) == 0) {
+            return 1; 
+        }
+    }
+    return 0;
+}
+
+
+
 int main() {
     displayHeader();
     Room rooms[100];
@@ -2591,6 +2661,9 @@ int main() {
     RoomType roomTypes[100];
     int roomTypeCount = 0;
 
+    User users[100];
+    int userCount = 0;
+
     // Load existing rooms from file
     loadRoomsFromFile(rooms, &roomCount);
 
@@ -2601,10 +2674,12 @@ int main() {
     loadMenu(menu, &menuCount);
 
     // Load login information from file
-    loadLoginInfo(&manager, &receptionist, &user);
+    loadLoginInfo(&manager, &receptionist, &users[0]);
 
     // Load user profile information from file
     loadUserProfile(&user);
+
+    loadUserDetails(users, &userCount);
 
     // Check if login info exists
     if (strlen(manager.username) == 0 || strlen(receptionist.username) == 0 || strlen(user.username) == 0) {
@@ -2635,7 +2710,8 @@ int main() {
         printf("| 1. Login as manager   |\n");
         printf("| 2. Login as receptionist|\n");
         printf("| 3. Login as user      |\n");
-        printf("| 4. Exit               |\n");
+        printf("| 4. Register New user      |\n");
+        printf("| 5. Exit               |\n");
         printf("+-----------------------+\n");
         int choice;
         scanf("%d", &choice);
@@ -2689,7 +2765,7 @@ int main() {
                     printf("| 8. Logout             |\n");
                     printf("+-----------------------+\n");
                     int choice2;
-                    scanf("%d", &choice2);
+                    scanf("Enter Choice: %d", &choice2);
 
                     if (choice2 == 1) {
                         bookRoom(rooms, roomCount, customers, &customerCount, bookings, &bookingCount, bills, &billCount);
@@ -2717,7 +2793,7 @@ int main() {
                 }
             }
         } else if (choice == 3) {
-            if (loginUser (user)) {
+            if (loginUser (users, userCount)) {
                 while (1) {
                     printf("+-----------------------+\n");
                     printf("|        User Menu     |\n");
@@ -2767,8 +2843,12 @@ int main() {
                 }
             }
         } else if (choice == 4) {
+            registerUser(&users[userCount], &userCount);
+            // userCount++;
+            break;
+        } else if(choice == 5){
             return 0;
-        } else {
+        }else {
             printf("Invalid choice\n");
         }
     }
