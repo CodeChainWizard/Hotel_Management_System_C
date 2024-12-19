@@ -2714,7 +2714,7 @@ int main() {
         printf("| 5. Exit               |\n");
         printf("+-----------------------+\n");
         int choice;
-        scanf("%d", &choice);
+        scanf("Enter Choice: %d", &choice);
 
         if (choice == 1) {
             if (loginManager(manager)) {
