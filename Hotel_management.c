@@ -1,4 +1,4 @@
-// #include <stdio.h>
+r // #include <stdio.h>
 // #include <stdlib.h>
 // #include <string.h>
 
@@ -2730,7 +2730,7 @@ int main() {
                     printf("| 6. Logout             |\n");
                     printf("+-----------------------+\n");
                     int choice2;
-                    scanf("%d", &choice2);
+                    scanf("Enter Choice: %d", &choice2);
 
                     if (choice2 == 1) {
                         addRoom(rooms, &roomCount, roomTypes, roomTypeCount);
@@ -2807,7 +2807,7 @@ int main() {
                     printf("| 7. Logout             |\n");
                     printf("+-----------------------+\n");
                     int choice2;
-                    scanf("%d", &choice2);
+                    scanf("Enter Choice: %d", &choice2);
 
                     if (choice2 == 1) {
                         printf("User  Profile:\n");
@@ -2845,7 +2845,7 @@ int main() {
         } else if (choice == 4) {
             registerUser(&users[userCount], &userCount);
             // userCount++;
-            break;
+            // break;
         } else if(choice == 5){
             return 0;
         }else {
